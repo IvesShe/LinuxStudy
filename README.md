@@ -31,6 +31,77 @@
 方便上傳文件，無需打指令
 - ![image](./images/2020-08-01122100.png)
 
+# 虛擬機安裝CentOS7
+## 方便本地測試
+- 使用VM Ware Workstation 15.5.5.6 build-16341506
+- 安裝CentOS7 - CentOS-7-x86_64-DVD-2003.iso [交大下載](http://centos.cs.nctu.edu.tw/7.8.2003/isos/x86_64/)
+
+## 修改CentOS設定
+
+```shell
+vi /etc/sysconfig/network-scripts/ifcfg-ens33
+```
+```shell
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=static
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=ens33
+UUID=預設即可
+DEVICE=ens33
+ONBOOT=yes
+IPADDR=192.168.160.128
+GATEWAY=192.168.160.2
+NETMASK=255.255.255.0
+DNS1=114.114.114.114
+```
+
+![image](./images/20200817210117.png)
+
+![image](./images/20200817205947.png)
+
+# 修改VM Ware設定
+
+![image](./images/20200817210519.png)
+
+在上方選單 Edit -> Virtual Newwork Editor
+![image](./images/20200817210609.png)
+
+![image](./images/20200817210612.png)
+
+## 連結成功
+
+![image](./images/20200817204624.png)
+
+![image](./images/20200817204631.png)
+
+## 開啟防火牆
+
+
+### 查看開放的端口號
+```shell
+firewall-cmd --list-all
+```
+
+![image](./images/20200817211205.png)
+
+### 設置開放的端口號
+```shell
+# xshell使用22端口連接
+sudo firewall-cmd --add-port=22/tcp --permanent
+```
+
+### 重啟防火牆
+```shell
+firewall-cmd --reload
+```
 ------
 
 # 指令筆記
@@ -600,13 +671,4 @@ passwd -d ivesshe
 此命令將用戶 ivesshe的口令刪除，這樣用戶 ivesshe下一次登錄時，系統就不再允許該用戶登錄了。
 
 # 筆記到p12
-
 ------
-
-
-
-
-
-==學習資料來源: **狂神說** 及網路查詢==
-
-
