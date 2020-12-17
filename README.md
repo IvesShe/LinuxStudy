@@ -87,6 +87,7 @@ service network restart
 
 ![image](./images/20200817204631.png)
 
+------
 ## 開啟防火牆
 
 
@@ -111,6 +112,106 @@ firewall-cmd --reload
 
 # 指令筆記
 參考網路資料整理記錄，方便學習及之後使用時查詢
+
+# 查版本、核心
+
+```bash
+ls -l /etc/*-release
+
+cat /etc/redhat-release
+
+cat /etc/os-release
+```
+
+![image](./images/20201217135205.png)
+
+# 常用的基本命令(圖文版)
+
+有時急著查指令，而且本來學習整理的，實際上進行別的項目的練習或實作也不敷使用，所以再找了別的版本放置於此，方便日後查找
+ 
+## 1. 輸入與輸出重新導向
+
+- Shell 的 file descriptor (fd) 通常有 10 個，以下是常用的 3 個標準輸出
+    fd = 0 (/dev/stdin), fd = 1 (/dev/stdout),  fd = 2 (/dev/stderr)
+- 使用 < 改變讀入的資料通道 (stdin)
+    從指定的檔案中讀入，< 的預設值為 0，所以 < 與 0< 一樣 
+- 使用 >, >> (附加) 改變輸出的資料通道 (stdout, stderr)
+    輸出到指定的檔案中，> 的預設值為 1，所以 > 與 1> 一樣
+
+![image](./images/command/cmd01.jpg)
+
+## 2. Pipe 與 Tee
+- 用 pipe  ( | ) 連接一系列指令的執行
+    + 一個指令執行後的輸出會通過 pipe 傳給第二個指令當作輸入，而第二個指令的輸出又會傳給第三個指令作為輸入，依此類推
+    + 範例
+        * $ ls / | sort -r
+        * $ du | sort –nr
+        * $ ls –lt | head
+- 使用 Tee 在 pipe 同時，又進行重導向
+    + 範例
+        * $ du -d1 -h | tee unsorted.txt | sort -nr
+        * $ more unsorted.txt
+        * $ du -d1 -h | tee 1.txt 2.txt 3.txt | sort -nr
+
+## 3. 檔案管理
+
+- 軟連結 (softlink 或 symbolic link)：指向另一支檔案或目錄的捷徑檔
+- 硬連結 (hardlink)：指向 inode index，無法指向目錄
+    + Hardlink 無法跨檔案系統使用 (因 inode 不同)
+    + Hardlink 會增加 link count
+    + 一支檔案的檔名就是 hardlink 的例子
+
+![image](./images/command/cmd02.jpg)
+
+## 4. 打包檔案
+
+- 使用 tar 工具將檔案與目錄打包成為單一歸檔 (archive, 未壓縮, 或稱為 tar ball)
+    + 打包參數 -cvf (c: 建立新歸檔, v: 顯示詳情, f: 指定檔名)
+    + 拆封參數 -xvf (x: 取出歸檔, v: 顯示詳情, f: 指定檔名)
+- tar 可配合壓縮工具，打包兼壓縮歸檔
+    + 壓縮參數 -czvf (gzip), -cjvf (bz2)
+    + 解壓參數 -xzvf (gzip), -xjvf (bz2)
+- 解開 tar ball 的指令最後可以加上 -C path 來指定解出檔案存放的位置
+
+![image](./images/command/cmd03.jpg)
+
+## 5. echo, cat, more, less, wc, head, tail 與 sort
+
+![image](./images/command/cmd04.jpg)
+## 6. grep, diff, find 與 whereis
+
+![image](./images/command/cmd05.jpg)
+
+## 7. du, df, lsblk, free 與 fdisk
+
+![image](./images/command/cmd06.jpg)
+
+## 8. file, wget, curl, ifconfig, ping, pwd 與 reboot
+![image](./images/command/cmd07.jpg)
+
+## 9. 帳戶管理
+![image](./images/command/cmd08.jpg)
+
+## 10. /etc/passwd, /etc/shadow 及 /etc/group
+
+- 帳號與群組以 UID/GID 數字紀錄
+- UID/GID 對應檔在 /etc/passwd 及 /etc/group
+    UID 0 為 root
+    非 0 為一般帳號 (1~999 為系統帳號，大於 1000 為可登入帳號)
+- /etc/passwd
+    名稱:密碼(x):UID:GID:全名:家目錄:Shell
+- 帳號密碼在 /etc/shadow 檔 (僅 root 可更動該檔)
+    名稱:加密密碼:更動日期:最小可變動日:最大需變動日:過期前警告日數:失效天數:帳號失效日:保留
+
+## 11. 觀察檔案權限
+
+![image](./images/command/cmd09.jpg)
+
+## 12. 查看處理程序
+
+![image](./images/command/cmd11.jpg)
+
+------
 
 > 關機
 
@@ -1061,19 +1162,11 @@ umount [-fn] 裝置文件名或掛載點
 
 視頻同步更新，這次一定！
 
-# 查版本、核心
-
-```bash
-ls -l /etc/*-release
-
-cat /etc/redhat-release
-
-cat /etc/os-release
-```
-
-![image](./images/20201217135205.png)
 
 
-==學習資料來源: **狂神說** 及網路查詢==
+==學習資料來源: 
+**狂神說** 
+https://www.eebreakdown.com/2016/08/linux.html
+及網路查詢==
 
 
